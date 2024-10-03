@@ -7,9 +7,11 @@ import { toast } from "sonner";
 export default function SuccessPage() {
   const { data, isLoading } = useSuccess();
 
+  console.log(data?.data);
+
   useEffect(() => {
     if (data && !data?.success) {
-      toast.error(data?.error);
+      toast.error(data?.message as string);
     }
   }, [data]);
 
@@ -21,7 +23,7 @@ export default function SuccessPage() {
     <div>
       <h1> Some random data of team members </h1>
       {data?.success &&
-        data?.value?.data.map((member) => <p key={member.id}>{member.name}</p>)}
+        data?.data?.map((member) => <p key={member.id}>{member.name}</p>)}
       {!data?.success && <p>Failed to load team members</p>}
     </div>
   );

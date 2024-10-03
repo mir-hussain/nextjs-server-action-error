@@ -1,13 +1,30 @@
 "use server";
 
-import { createServerAction, ServerActionError } from "@/utils/action";
-import { delay } from "@/utils/delay";
-
-export const successFunc = createServerAction(async () => {
+export const successFunc = async () => {
   try {
-    //* You can change the "resolve" to "reject"
-    //* to see what happens when there is an error
-    await delay("resolve");
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    return {
+      success: true,
+      data: [
+        { id: "AFDasdfQWERASDf3423", name: "Mir" },
+        { id: "ADSFasdVBXVfaa65745", name: "Mezba" },
+      ],
+    };
+  } catch (error) {
+    return {
+      success: false,
+      //* you can return error message from here
+      message: error,
+    };
+  }
+};
+
+export const errorFunc = async () => {
+  try {
+    await new Promise((_, reject) =>
+      setTimeout(() => reject("User Already exits"), 2000)
+    );
 
     return {
       data: [
@@ -16,25 +33,10 @@ export const successFunc = createServerAction(async () => {
       ],
     };
   } catch (error) {
-    console.error(error);
-    throw new ServerActionError("Something went wrong");
-  }
-});
-
-export const errorFunc = createServerAction(async () => {
-  try {
-    //* You can change the "reject" to "resolve"
-    //* to see what happens when there is no error
-    await delay("reject");
-
     return {
-      data: [
-        { id: "AFDasdfQWERASDf3423", name: "Mir" },
-        { id: "ADSFasdVBXVfaa65745", name: "Mezba" },
-      ],
+      success: false,
+      //* you can return error message from here
+      message: error,
     };
-  } catch (error) {
-    console.error(error);
-    throw new ServerActionError("Something went wrong");
   }
-});
+};

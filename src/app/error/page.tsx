@@ -5,18 +5,17 @@ import { useEffect } from "react";
 import { toast } from "sonner";
 
 export default function ErrorPage() {
-  const { mutate, data } = useError();
+  const { mutate, data, isPending } = useError();
 
   console.log(data);
 
   useEffect(() => {
     if (data && !data?.success) {
-      toast.error(data?.error);
+      toast.error(data?.message as string);
     }
   }, [data]);
 
   const handleGenerateError = () => {
-    console.log("Clicked");
     mutate();
   };
 
@@ -24,7 +23,7 @@ export default function ErrorPage() {
     <div>
       <h1> This is error page </h1>
       <button onClick={() => handleGenerateError()}>
-        Click to generate error
+        {isPending ? "Loading..." : "Click to generate error"}
       </button>
     </div>
   );
